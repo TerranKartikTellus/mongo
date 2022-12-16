@@ -11,7 +11,9 @@ export default function Home() {
   email: "", password: ""
  })
   async function  SubmitBut(){
-  console.log('vlivk');
+ 
+    toast.success('Loading!')
+    
   const res = await fetch('/api/login', {
             method: 'POST',
             headers: {

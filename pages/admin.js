@@ -138,7 +138,7 @@ console.log(filtered);
 export async function getServerSideProps(context) {
   
   // let res = await fetch(`https://cars-orcin.vercel.app`+"/api/cars", {
-  let res = await fetch(`http://localhost:3000`+"/api/getContacts", {
+  let res = await fetch(`https://mongocontact.vercel.app`+"/api/getContacts", {
   method: "GET",
     headers: {
       "Content-Type": "application/json",

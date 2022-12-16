@@ -57,7 +57,7 @@ export default function FormContent({email,count,response}){
   e.preventDefault();
   //  let res = await fetch(`https://cars-orcin.vercel.app`+"/api/addContact", {
   console.log(process.env.URL); 
-  let res = await fetch("http://localhost:3000"+"/api/addContact", {
+  let res = await fetch("https://mongocontact.vercel.app"+"/api/addContact", {
 
    method: "POST",
     body: JSON.stringify(
