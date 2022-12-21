@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import jwt from "jsonwebtoken";
 import { useJwt } from "react-jwt";
 import Link from "next/link";
 import { toast, Toaster } from "react-hot-toast";
 import FormContent from "../components/FormContent";
+import jsPDF from 'jspdf';
 
 export default function Form({ response,contacts}){
 console.log(contacts);
@@ -26,6 +27,22 @@ const { decodedToken, isExpired ,reEvaluateToken} = useJwt(token);
       }
     }
   )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return(
     <div className="flex flex-col items-center justify-start pt-20 w-full h-screen">
@@ -72,10 +89,32 @@ function AdminP({email,contacts}){
 
  const submitFormToDB = async(e) =>{
 console.log(contacts);
-setfiltered(contacts.filter(i=>withinRange(i.createdat) && i  ))
+setfiltered(contacts.filter(i=>withinRange(i.createdat) && i+1  ))
 console.log(filtered);
 
 }
+
+  const reportTemplateRef = useRef(null);
+
+	const handleGeneratePdf = () => {
+		const doc = new jsPDF({
+			format: 'a4',
+			unit: 'px',
+		});
+
+
+		// Adding the fonts.
+		doc.setFont('Inter-Regular', 'normal');
+    doc.setTextColor('#ffff')
+// pdf.setFontType("bold");
+doc.setFontSize(3);
+		doc.html(reportTemplateRef.current, {
+			async callback(doc) {
+				await doc.save('document');
+			},
+		});
+	};
+  function toDate(d){ var todayDate = new Date(d).toISOString().slice(0, 10); return todayDate }
   return(
     <div className="flex flex-row items-center  justify-start">
     <div className="w-1/2">
@@ -86,10 +125,10 @@ console.log(filtered);
 
           <div className="text-base">Search From : 
           </div>
-            <input defaultValue={"2022-12-05"} onChange={(e)=>{setRange({...dateRange, from: e.target.value}); console.log(dateRange);}} className="bg-transparent outline-none" type={"date"}></input>
+            <input defaultValue={""} onChange={(e)=>{setRange({...dateRange, from: e.target.value}); console.log(dateRange);}} className="bg-transparent outline-none" type={"date"}></input>
           <div className="text-base">To : 
           </div>
-            <input defaultValue={"2022-12-22"} onChange={(e)=>{setRange({...dateRange, to: e.target.value}); console.log(dateRange);}} className="bg-transparent outline-none" type={"date"}></input>
+            <input defaultValue={""} onChange={(e)=>{setRange({...dateRange, to: e.target.value}); console.log(dateRange);}} className="bg-transparent outline-none" type={"date"}></input>
           <div className="text-base col-span-2 text-center border-b-2 border-black mt-3"> 
             <button className="" onClick={
               submitFormToDB
@@ -100,20 +139,21 @@ console.log(filtered);
     
     </div>
     <div className=" w-1/2  p-5 ">
-      <table className="bg-gray-900 rounded-md text-gray-50 font-thin">
-        <tr className="mx-2">
+      <table className="bg-gray-900 text-[10px] rounded-md text-gray-50 font-thin">
+        <tr className="mx-2 w-full">
           <th className="mx-2 p-3">name</th>
           <th className="mx-2 p-3">created at</th>
-          <th className="mx-2 p-3">contact</th>
+          <th className="mx-2 p-3 w-[200px]">contact</th>
           <th className="mx-2 p-3">token</th>
           <th className="mx-2 p-3">created by</th>
+          <th className="mx-2 p-3">PDF</th>
         </tr>
         
         {
           filtered && filtered.map((i,index)=>(
-            <tr key={index} className={index%2==0?"bg-gray-900":"bg-gray-600"}>
+            <tr ref={reportTemplateRef} key={index} className={index%2==0?"bg-gray-900":"bg-gray-600"}>
               <th className="mx-2 my-2 p-3">{i.data[0].name}</th>
-              <th className="mx-2 my-2 p-3">{i.createdat}</th>
+              <th className="mx-2 my-2 w-full">{toDate(i.createdat)}</th>
               <th className="mx-2 my-2 p-3">{i.data[0].contact.map(i=><div key={i}>{i[0]}</div>)}</th>
               <th className="mx-2 my-2 p-3">
                 {i.data[0].contact.map(i=>
@@ -126,6 +166,11 @@ console.log(filtered);
               
               </th>
                   <th className="mx-2 my-2 p-3">{i.createdBy ? i.createdBy : "-"}</th>
+                  <th className="mx-2 my-2 p-3">
+                    <button className="button hover:underline"  onClick={handleGeneratePdf}>
+		              		Generate as PDF
+		              	</button>
+                  </th>
             </tr>
           ))
         }
