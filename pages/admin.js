@@ -139,14 +139,14 @@ doc.setFontSize(3);
     
     </div>
     <div className=" w-1/2  p-5 ">
-      <table className="bg-gray-900 text-[10px] rounded-md text-gray-50 font-thin">
+      <table className="bg-gray-900 text- rounded-md text-gray-50 font-thin">
         <tr className="mx-2 w-full">
           <th className="mx-2 p-3">name</th>
           <th className="mx-2 p-3">created at</th>
           <th className="mx-2 p-3 w-[200px]">contact</th>
           <th className="mx-2 p-3">token</th>
           <th className="mx-2 p-3">created by</th>
-          <th className="mx-2 p-3">PDF</th>
+          {/* <th className="mx-2 p-3">PDF</th> */}
         </tr>
         
         {
@@ -166,11 +166,11 @@ doc.setFontSize(3);
               
               </th>
                   <th className="mx-2 my-2 p-3">{i.createdBy ? i.createdBy : "-"}</th>
-                  <th className="mx-2 my-2 p-3">
+                  {/* <th className="mx-2 my-2 p-3">
                     <button className="button hover:underline"  onClick={handleGeneratePdf}>
 		              		Generate as PDF
 		              	</button>
-                  </th>
+                  </th> */}
             </tr>
           ))
         }
