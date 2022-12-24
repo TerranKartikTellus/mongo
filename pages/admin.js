@@ -5,6 +5,8 @@ import Link from "next/link";
 import { toast, Toaster } from "react-hot-toast";
 import FormContent from "../components/FormContent";
 import jsPDF from 'jspdf';
+// import asheet from "./a4";
+
 
 export default function Form({ response,contacts}){
 console.log(contacts);
@@ -146,12 +148,12 @@ doc.setFontSize(3);
           <th className="mx-2 p-3 w-[200px]">contact</th>
           <th className="mx-2 p-3">token</th>
           <th className="mx-2 p-3">created by</th>
-          {/* <th className="mx-2 p-3">PDF</th> */}
+          <th className="mx-2 p-3">PDF</th>
         </tr>
         
         {
           filtered && filtered.map((i,index)=>(
-            <tr ref={reportTemplateRef} key={index} className={index%2==0?"bg-gray-900":"bg-gray-600"}>
+            <tr  key={index} className={index%2==0?"bg-gray-900":"bg-gray-600"}>
               <th className="mx-2 my-2 p-3">{i.data[0].name}</th>
               <th className="mx-2 my-2 w-full">{toDate(i.createdat)}</th>
               <th className="mx-2 my-2 p-3">{i.data[0].contact.map(i=><div key={i}>{i[0]}</div>)}</th>
@@ -166,11 +168,21 @@ doc.setFontSize(3);
               
               </th>
                   <th className="mx-2 my-2 p-3">{i.createdBy ? i.createdBy : "-"}</th>
-                  {/* <th className="mx-2 my-2 p-3">
+                  <th className="mx-2 my-2 p-3">
                     <button className="button hover:underline"  onClick={handleGeneratePdf}>
 		              		Generate as PDF
 		              	</button>
-                  </th> */}
+                  </th>
+                    <div  ref={reportTemplateRef} className=" absolute">
+                        {i.data[0].contact.map(e=>
+                          <div className="w-[21cm] mx-10 h-[16.7cm]"  key={e}>
+                                <div>Name: {i.data[0].name}</div>
+                                <div>Token: {e[1]}</div>
+                                <div>Contact: {e[0]}</div>
+                          </div>
+                        )}
+                    </div>
+                  
             </tr>
           ))
         }
